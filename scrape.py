@@ -1,5 +1,6 @@
 import linkedin as li
 import pandas as pd
+from os.path import exists
 
 # Note: LinkedIn only allows up to 1000 listings per search result, 
 # recommended to use the same search query with different filter
@@ -8,7 +9,7 @@ import pandas as pd
 # WARNING: linkedin.py uses multiprocessing to process multiple URLs, 
 # scraping many URLs at once is resource intensive.
 
-# Change to your URLs.
+# Change to URLs you wish to scrape.
 urls = [
 	'https://www.linkedin.com/jobs/search?keywords=Finance&location=United%20States',
 ]
@@ -22,4 +23,7 @@ if __name__ == '__main__':
 	df.drop_duplicates(subset='full_url', inplace=True)
 
 	# save to csv file, appending to it if it exists
-	df.to_csv_('linkedin-job-data.csv', mode='a', index_label='id')
+	if exists('linkedin-job-data.csv'):
+		df.to_csv('linkedin-job-data.csv', mode='a', index=False, header=False)
+	else:
+		df.to_csv('linkedin-job-data.csv', mode='w', index=False)	
