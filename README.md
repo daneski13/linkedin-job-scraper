@@ -1,21 +1,24 @@
 # LinkedIn Scraper
 
-LinkedIn is an extremely popular platform for job seekers make it one of the best websites to gather data on the job market.
+LinkedIn is an extremely popular platform for job seekers, making it one of the best websites to gather data on the job market.
 
 ## Scraping Job Listings
 
-To use this scraper to collect data, clone this repository, download the proper [ChromeDriver](https://chromedriver.chromium.org/downloads) for your version of the Chrome Browser and put the executable in the same directory as both linkedin.py and scrape.py. The python libraries needed for this program are numpy, pandas, selenium, and tqdm. A requirements.txt file is provided.
+To collect data using this scraper, clone this repository download the proper [ChromeDriver](https://chromedriver.chromium.org/downloads) and put the executable in the same directory as both linkedin.py and scrape.py. The python libraries needed for this program are numpy, pandas, selenium, and tqdm. A requirements.txt file is provided.
+
+After downloading ChromeDriver and installing the dependencies, open the scrape.py file and change the URLs list to a list of the URLs you wish to scrape. Running `python scrape.py` will show a progress bar for each URL being scraped and a linkedin-job-data.csv file will eventually be outputted containing the scraped data.
 
 ## Structure of Scraped Data
 
-id - index number
-title - title of the listing
-full_url - the LinkedIn URL of the job posting
-company - the company name
-company_url - the company's LinkedIn URL
-location - the job's location
-description - raw HTML of the job's description
-seniority_level - the job's seniority level
-employment_type - the job's employment type (Full Time, Part Time etc.)
-job_function - the job's expected functions
-industries - the industries the company is in
+| Column Name     | Description of Data                               |
+| --------------- | ------------------------------------------------- |
+| title           | title of the job listing                          |
+| full_url        | LinkedIn URL of the job posting                   |
+| company         | company name                                      |
+| company_url     | company's LinkedIn URL                            |
+| location        | job's location                                    |
+| description     | raw HTML of the job's description                 |
+| seniority_level | job's seniority level                             |
+| employment_type | job's employment type (Full Time, Part Time etc.) |
+| job_function    | job's expected functions                          |
+| industries      | industries the company is in                      |
