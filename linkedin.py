@@ -26,7 +26,7 @@ def __scrape_job(job, wd):
 
 	""" 
 	Tries to get the full url, company name, company URL, and location of the listing,
-	otherwise information is blank string. 
+	otherwise the information is an np.nan object. 
 	"""
 	try:
 		# Full URL of the listing
@@ -35,21 +35,21 @@ def __scrape_job(job, wd):
 		full_url = furl.get_attribute('href')
 		# the url without all trackers and ref stuff
 		full_url = re.search(r'https:\/\/www.linkedin.com\/jobs\/view\/.+\?', full_url).group(0)
+
 		company = job.find_element(By.CLASS_NAME, 'base-search-card__subtitle').text
 		company_url = job.find_element(By.CSS_SELECTOR, 'h4>a').get_attribute('href')
 		location = job.find_element(By.CLASS_NAME, 'job-search-card__location').text
 	except:
-		furl = ''
-		full_url = ''
-		company = ''
-		company_url = ''
-		location = ''
+		full_url = np.nan
+		company = np.nan
+		company_url = np.nan
+		location = np.nan
 
 	time.sleep(3)
 
 	""" 
 	Attempts to get the description, seniority level, employment type, job function, and industries 
-	of the listing, missing information is 'Not Assigned'
+	of the listing, missing information is 'Not Assigned' to match other listings
 	"""
 	try:
 		description = wd.find_element(By.XPATH, '/html/body/div[1]/div/section/div[2]/div/section[1]/div/div/section/div').get_attribute('innerHTML')
@@ -108,16 +108,15 @@ def __scrape(url, bar_position=0):
 	last_scraped_job = 0 # index of the last scraped job
 	height = wd.execute_script("return document.documentElement.scrollHeight") # height of the webpage
 	same_position = 0 # counter for how many times the page height has not changed
-
-	# Progress bar
+	# Loop progress bar
 	pbar = tqdm(desc='Scraping...', total=num_of_jobs, position=bar_position)
 	while True:
 
 		""" 
 		Passes the next job's WebElement to the __scrape_job function, appending the resulting data frame 
 		to jobs_data. On failure, checks to see if the bottom of the web page has been reached and breaks the loop.
-		Otherwise clicks the button to show more listings, on failure and the height of the document does not 
-		change, loop ends with listings thus far.
+		Otherwise clicks the button to show more listings, if failure and the height of the document does not 
+		change, loop ends returning listings thus far.
 		"""
 		try:
 			xpath = '//*[@id="main-content"]/section[2]/ul/li[{}]'.format(last_scraped_job+1)
@@ -159,7 +158,7 @@ def __scrape(url, bar_position=0):
 
 	# quits the WebDriver, combines the jobs_data array into a single data frame and returns it
 	wd.quit()
-	return pd.concat(jobs_data).replace([''], np.nan)
+	return pd.concat(jobs_data)
 
 
 # Helper function that calls the scrape function, adding it to the process queue
