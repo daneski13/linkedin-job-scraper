@@ -2,6 +2,7 @@ import time
 import traceback
 import re
 import sys
+import platform
 import multiprocessing as mp
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -91,9 +92,10 @@ def __scrape_job(job, wd):
 
 # Main scraping function
 def __scrape(url, bar_position=0):
+	webdriver_path = './chromedriver' if platform.system() != 'Windows' else 'chromedriver.exe'
 
 	# starts the webdriver process
-	wd = webdriver.Chrome('./chromedriver', options=__chrome_options)
+	wd = webdriver.Chrome(webdriver_path, options=__chrome_options)
 	wd.get(url)
 	time.sleep(2.5)
 
