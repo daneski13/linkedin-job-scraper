@@ -16,7 +16,7 @@ __chrome_options = Options()
 __chrome_options.add_argument("--disable-extensions")
 __chrome_options.add_argument("--headless")
 __chrome_options.add_argument("--disable-gpu")
-__chrome_options.add_argument("window-size=1400,2100")
+__chrome_options.add_argument("window-size=2100,700")
 
 
 # Returns a data frame containing a job's info from a WebElement
@@ -24,22 +24,29 @@ def __scrape_job(job, wd):
 	# Job posting title
 	title = job.find_element(By.CLASS_NAME, 'base-search-card__title').text
 
+	# clicks the element, sometimes clicking fails so it tries 3 times, scrolling down the page on failure
+	for _ in range(3):
+		try:
+			job.find_element(By.CSS_SELECTOR, 'a').click()
+			break
+		except:
+			wd.execute_script("window.scrollBy(0,500);")
+			continue
+
 	""" 
 	Tries to get the full url, company name, company URL, and location of the listing,
 	otherwise the information is an np.nan object. 
 	"""
 	try:
 		# Full URL of the listing
-		furl = job.find_element(By.CLASS_NAME, 'base-card__full-link')
-		furl.click()
-		full_url = furl.get_attribute('href')
+		full_url = job.find_element(By.CSS_SELECTOR, 'a').get_attribute('href')
 		# the url without all trackers and ref stuff
 		full_url = re.search(r'https:\/\/www.linkedin.com\/jobs\/view\/.+\?', full_url).group(0)
 
 		company = job.find_element(By.CLASS_NAME, 'base-search-card__subtitle').text
 		company_url = job.find_element(By.CSS_SELECTOR, 'h4>a').get_attribute('href')
 		location = job.find_element(By.CLASS_NAME, 'job-search-card__location').text
-	except:
+	except:			
 		full_url = np.nan
 		company = np.nan
 		company_url = np.nan
@@ -52,9 +59,10 @@ def __scrape_job(job, wd):
 	of the listing, missing information is 'Not Assigned' to match other listings
 	"""
 	try:
-		description = wd.find_element(By.XPATH, '/html/body/div[1]/div/section/div[2]/div/section[1]/div/div/section/div').get_attribute('innerHTML')
+		description = wd.find_element(By.CLASS_NAME, 'show-more-less-html__markup').get_attribute('innerHTML')
+		description = str(description)
 	except:
-		description = wd.find_element(By.XPATH, '/html/body/div[1]/div/section/div[2]/div/section[2]/div/div/section/div').get_attribute('innerHTML')
+		description = np.nan
 	try:
 		seniority_level = wd.find_element(By.XPATH, '/html/body/div[1]/div/section/div[2]/div/section[1]/div/ul/li[1]/span').text
 	except:

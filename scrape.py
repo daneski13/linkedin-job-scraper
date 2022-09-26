@@ -2,12 +2,12 @@ import linkedin as li
 import pandas as pd
 from os.path import exists
 
-# Note: LinkedIn only allows up to 1000 listings per search result, 
+# Note: LinkedIn only shows up to 1000 listings per search result, 
 # recommended to use the same search query with different filter
-# combinations for full coverage.
+# combinations for the best results.
 
 # WARNING: linkedin.py uses multiprocessing to process multiple URLs, 
-# scraping many URLs at once is resource intensive.
+# so scraping many URLs at once may be very resource intensive.
 
 # Change to URLs you wish to scrape.
 urls = [
