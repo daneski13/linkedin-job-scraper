@@ -4,13 +4,13 @@ LinkedIn is an extremely popular platform for job seekers, making it one of the 
 
 ## Scraping Job Listings
 
-To collect data using this scraper, clone this repository download the proper [ChromeDriver](https://chromedriver.chromium.org/downloads) and put the executable in the same directory as both linkedin.py and scrape.py. The python libraries needed for this program are numpy, pandas, selenium, and tqdm. A requirements.txt file is provided.
+To collect data using this scraper, clone this repository and download the proper [ChromeDriver](https://chromedriver.chromium.org/downloads) and put the executable in the same directory as both linkedin.py and scrape.py. The python libraries needed for this program are numpy, pandas, selenium, and tqdm. A requirements.txt file is provided.
 
 After downloading ChromeDriver and installing the dependencies, open the scrape.py file and change the URLs list to a list of the URLs you wish to scrape. Running `python scrape.py` will show a progress bar for each URL being scraped and a linkedin-job-data.csv file will eventually be outputted containing the scraped data.
 
 ## Structure of Scraped Data
 
-| Column Name     | Description of Data                               |
+| Column Name     | Definition                                        |
 | --------------- | ------------------------------------------------- |
 | title           | title of the job listing                          |
 | full_url        | LinkedIn URL of the job posting                   |
